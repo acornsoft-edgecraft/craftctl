@@ -14,7 +14,6 @@ var rootCmd = &cobra.Command{
 	  
    One can use stringer to modify or inspect strings straight from the terminal`,
 	Run: func(cmd *cobra.Command, args []string) {
-
 	},
 }
 
