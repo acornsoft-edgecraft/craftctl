@@ -25,4 +25,3 @@
 -----
 ## ⚡️ Quick start
 
-**- Update Required -**
