@@ -24,5 +24,3 @@
 **Library code that's ok to use by applications.**. This directory contains all the project-specific code tailored only for your business use case, like _configs_, _middleware_, _routes_ or _utils_.
 -----
 ## ⚡️ Quick start
-
-
