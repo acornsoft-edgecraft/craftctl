@@ -6,7 +6,7 @@ LABEL maintainer="acornsoft"
 WORKDIR /build
 
 # Build output 
-ARG PROJECT_DIR=/edge-benchmarks
+ARG PROJECT_DIR=edge-benchmarks
 ARG APP_NAME=edge-summarize
 ARG BUILD_DIR=$(PWD)/bin
 
