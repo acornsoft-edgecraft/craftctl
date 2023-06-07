@@ -19,6 +19,11 @@ RUN go build -ldflags="-s -w" -o bin/edge-summarize main.go
 ## edge-benchamrks container image 생성
 FROM registry.suse.com/bci/bci-base:15.4 as intermediate
 
+# Copy binary and config files from /build to root folder of scratch container.
+COPY --from=builder ["/build/package/*.sh", "/package"]
+COPY --from=builder ["/build/conf", "/conf"]
+COPY --from=builder ["/build/bin/edge-summarize", "/"]
+
 #Label the image for cleaning after build process
 LABEL stage=intermediate
 
@@ -49,15 +54,13 @@ COPY --from=intermediate /kube-bench/cfg /etc/kube-bench/cfg/
 
 # COPY package/cfg/cis-1.6-k3s /etc/kube-bench/cfg/cis-1.6-k3s
 
-COPY --from=builder  package/run.sh \
-    package/run-kube-bench.sh \    
-    /usr/bin/
-
+COPY --from=intermediate  ["/package/*.sh", "/usr/bin/"]
+    
 RUN mkdir edge-benchmarks
 
 # COPY bin/edge-summarize /edge-benchmarks
 # COPY conf/ /edge-benchmarks/conf/
-COPY --from=builder ["/build/bin/edge-summarize", "edge-benchmarks"]
-COPY --from=builder ["/build/conf/", "edge-benchmarks/conf"]
+COPY --from=intermediate ["/edge-summarize", "edge-benchmarks"]
+COPY --from=intermediate ["/conf/", "edge-benchmarks/conf"]
 
 CMD ["run.sh"]
