@@ -6,19 +6,68 @@ LABEL maintainer="acornsoft"
 WORKDIR /build
 
 # Build output 
+PROJECT_DIR = /edge-benchmarks
 APP_NAME = edge-summarize
 BUILD_DIR = $(PWD)/bin
 
 # Copy and download dependency using go mod.
-COPY go.mod go.sum ./
+COPY $(PROJECT_DIR)/go.mod $(PROJECT_DIR)/go.sum ./
 RUN go mod download
 
 # Copy the code into the container.
-COPY . .
+COPY $(PROJECT_DIR) .
 
 # Set necessary environment variables needed for our image and build the API server.
 ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
-RUN go build -ldflags="-s -w" -o $(BUILD_DIR)/$(APP_NAME) /edge-benchmarks/main.go
+RUN go build -ldflags="-s -w" -o $(BUILD_DIR)/$(APP_NAME) main.go
 
-# Command to run when starting the container.
-ENTRYPOINT [$(BUILD_DIR)/$(APP_NAME)]
+## edge-benchamrks container image 생성
+FROM registry.suse.com/bci/bci-base:15.4 as intermediate
+
+# Copy binary and config files from /build to root folder of scratch container.
+COPY --from=builder ["$(WORKDIR)/$(BUILD_DIR)/$(APP_NAME)", "$(BUILD_DIR)/$(APP_NAME)"]
+COPY --from=builder ["$(WORKDIR)/package/run.sh", "$(BUILD_DIR)/$(APP_NAME)"]
+COPY --from=builder ["$(WORKDIR)/$(BUILD_DIR)/$(APP_NAME)", "$(BUILD_DIR)/$(APP_NAME)"]
+
+#Label the image for cleaning after build process
+LABEL stage=intermediate
+
+RUN zypper --non-interactive update \
+    && zypper --non-interactive install \
+    git
+
+RUN git clone -b v0.6.12 --depth 1 https://github.com/aquasecurity/kube-bench.git
+
+FROM registry.suse.com/bci/bci-base:15.4
+ARG kube_bench_tag=0.6.12
+ARG sonobuoy_version=0.56.15
+
+RUN zypper --non-interactive update \
+    && zypper --non-interactive install \
+    curl \
+    jq \
+    vim \
+    systemd \
+    tar \
+    awk \
+    gzip
+    
+RUN curl -sLf https://github.com/vmware-tanzu/sonobuoy/releases/download/v${sonobuoy_version}/sonobuoy_${sonobuoy_version}_linux_amd64.tar.gz | tar -xvzf - -C /usr/bin sonobuoy
+RUN curl -sLf https://github.com/aquasecurity/kube-bench/releases/download/v${kube_bench_tag}/kube-bench_${kube_bench_tag}_linux_amd64.tar.gz | tar -xvzf - -C /usr/bin
+
+COPY --from=intermediate /kube-bench/cfg /etc/kube-bench/cfg/
+
+# COPY package/cfg/cis-1.6-k3s /etc/kube-bench/cfg/cis-1.6-k3s
+
+COPY --from=builder  package/run.sh \
+    package/run-kube-bench.sh \    
+    /usr/bin/
+
+RUN mkdir edge-benchmarks
+
+# COPY bin/edge-summarize /edge-benchmarks
+# COPY conf/ /edge-benchmarks/conf/
+COPY --from=builder ["$(WORKDIR)/$(BUILD_DIR)/$(APP_NAME)", "$(PROJECT_DIR)"]
+COPY --from=builder ["$(WORKDIR)/conf/", "$(PROJECT_DIR)/conf"]
+
+CMD ["run.sh"]
