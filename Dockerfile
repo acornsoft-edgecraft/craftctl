@@ -24,11 +24,6 @@ RUN go build -ldflags="-s -w" -o $(BUILD_DIR)/$(APP_NAME) main.go
 ## edge-benchamrks container image 생성
 FROM registry.suse.com/bci/bci-base:15.4 as intermediate
 
-# Copy binary and config files from /build to root folder of scratch container.
-COPY --from=builder ["$(WORKDIR)/$(BUILD_DIR)/$(APP_NAME)", "$(BUILD_DIR)/$(APP_NAME)"]
-COPY --from=builder ["$(WORKDIR)/package/run.sh", "$(BUILD_DIR)/$(APP_NAME)"]
-COPY --from=builder ["$(WORKDIR)/$(BUILD_DIR)/$(APP_NAME)", "$(BUILD_DIR)/$(APP_NAME)"]
-
 #Label the image for cleaning after build process
 LABEL stage=intermediate
 
