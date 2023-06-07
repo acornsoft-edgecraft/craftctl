@@ -64,6 +64,6 @@ RUN mkdir edge-benchmarks
 # COPY bin/edge-summarize /edge-benchmarks
 # COPY conf/ /edge-benchmarks/conf/
 COPY --from=builder ["/build/bin/edge-summarize", "edge-benchmarks"]
-COPY --from=intermediate ["/build/conf/", "edge-benchmarks/conf"]
+COPY --from=builder ["/build/conf/", "edge-benchmarks/conf"]
 
 CMD ["run.sh"]
