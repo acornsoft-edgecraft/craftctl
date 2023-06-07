@@ -20,7 +20,7 @@ jobs:
       - name: Set variables
         id: variables
         run: |
-          PROJECT="craftctl"
+          PROJECT="edge-benchmarks"
           VERSION="${{ github.event.inputs.version }}"
           REGISTRY="ghcr.io/${{ github.repository_owner }}"
           if [[ $VERSION == "" ]]; then
