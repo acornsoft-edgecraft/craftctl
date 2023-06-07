@@ -6,9 +6,9 @@ LABEL maintainer="acornsoft"
 WORKDIR /build
 
 # Build output 
-PROJECT_DIR = /edge-benchmarks
-APP_NAME = edge-summarize
-BUILD_DIR = $(PWD)/bin
+ARG PROJECT_DIR = /edge-benchmarks
+ARG APP_NAME = edge-summarize
+ARG BUILD_DIR = $(PWD)/bin
 
 # Copy and download dependency using go mod.
 COPY $(PROJECT_DIR)/go.mod $(PROJECT_DIR)/go.sum ./
