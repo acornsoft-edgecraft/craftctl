@@ -5,21 +5,16 @@ LABEL maintainer="acornsoft"
 # Move to working directory (/build).
 WORKDIR /build
 
-# Build output 
-ARG PROJECT_DIR=edge-benchmarks
-ARG APP_NAME=edge-summarize
-ARG BUILD_DIR=$(PWD)/bin
-
 # Copy and download dependency using go mod.
-COPY $(PROJECT_DIR)/go.mod $(PROJECT_DIR)/go.sum ./
+COPY edge-benchmarks/go.mod edge-benchmarks/go.sum ./
 RUN go mod download
 
 # Copy the code into the container.
-COPY $(PROJECT_DIR) .
+COPY edge-benchmarks .
 
 # Set necessary environment variables needed for our image and build the API server.
 ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
-RUN go build -ldflags="-s -w" -o $(BUILD_DIR)/$(APP_NAME) main.go
+RUN go build -ldflags="-s -w" -o bin/edge-summarize main.go
 
 ## edge-benchamrks container image 생성
 FROM registry.suse.com/bci/bci-base:15.4 as intermediate
@@ -62,7 +57,7 @@ RUN mkdir edge-benchmarks
 
 # COPY bin/edge-summarize /edge-benchmarks
 # COPY conf/ /edge-benchmarks/conf/
-COPY --from=builder ["$(WORKDIR)/$(BUILD_DIR)/$(APP_NAME)", "$(PROJECT_DIR)"]
-COPY --from=builder ["$(WORKDIR)/conf/", "$(PROJECT_DIR)/conf"]
+COPY --from=builder ["/build/bin/edge-summarize", "edge-benchmarks"]
+COPY --from=builder ["/build/conf/", "edge-benchmarks/conf"]
 
 CMD ["run.sh"]
