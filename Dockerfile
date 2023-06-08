@@ -48,7 +48,8 @@ RUN curl -sLf https://github.com/aquasecurity/kube-bench/releases/download/v${ku
 
 # Copy binary and config files from /build to root folder of scratch container.
 COPY --from=intermediate /kube-bench/cfg /etc/kube-bench/cfg/
-COPY --from=builder ["/build/package/*.sh", "/usr/bin/"]
+COPY --from=builder ["/build/package/cfg", "/etc/kube-bench/cfg"]
+COPY --from=builder ["/build/package/*.sh", "/build/package/helper_scripts/*.sh", "/usr/bin/"]
 RUN mkdir edge-benchmarks
 COPY --from=builder ["/build/bin/edge-summarize", "edge-benchmarks"]
 COPY --from=builder ["/build/conf/", "edge-benchmarks/conf"]
