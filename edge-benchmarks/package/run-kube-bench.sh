@@ -27,7 +27,7 @@ fi
 
 
 # Run kube-bench
-kube-bench run --config-dir "/etc/kube-bench/cfg" --targets $targets $benchmark $version --json --outputfile ${KB_OUTPUT_FILE} -v=3 2> "${ERROR_LOG_FILE}"
+kube-bench run --config-dir "/etc/kube-bench/cfg" --targets $targets $benchmark $version --json --outputfile ${KB_OUTPUT_FILE} -v=3 > "${ERROR_LOG_FILE}"
 
 echo "KUBE_BENCH OUTPUT FILE :: ${KB_OUTPUT_FILE}"
 
