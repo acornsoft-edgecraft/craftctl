@@ -69,3 +69,18 @@
 #### [참고: [Sonobuoy Plugin](https://sonobuoy.io/docs/v0.56.15/plugins/)]
 
 ![Sonobuoy Plugin](./images/sonobuoy-plugin-contract.png)
+
+
+#### 주의사항
+
+- microk8s
+
+    - microk8s는 구조적인 문제로 인해 Fail 수를 줄이기에는 한계가 있다.
+
+        - 대표적으로 permission, owner 등이 권장사항과 다름.
+
+    - worker node에서 알 수 없는 이유로 실행이 되지 않을 수 있다. 
+    
+        - sonobuoy plugin pod의 네트워크 문제로 추측되지만 원인 및 해결책을 찾지 못함.
+
+        - worker node에서 `microk8s inspect` 실행 시 `FAIL:  Service snap.microk8s.daemon-k8s-dqlite is not running` 오류가 발생하지만 실행에는 영향을 주지 않음. (클러스터 생성 직후부터 발생)
