@@ -28,6 +28,7 @@ master:
       - "apiserver"
       - "openshift start master api"
       - "hypershift openshift-kube-apiserver"
+      - "containerd"
     confs:
       - /etc/kubernetes/manifests/kube-apiserver.yaml
       - /etc/kubernetes/manifests/kube-apiserver.yml
@@ -45,6 +46,7 @@ master:
       - "hyperkube kube-scheduler"
       - "scheduler"
       - "openshift start master controllers"
+      - "containerd"
     confs:
       - /etc/kubernetes/manifests/kube-scheduler.yaml
       - /etc/kubernetes/manifests/kube-scheduler.yml
@@ -59,6 +61,7 @@ master:
       - /var/lib/kube-scheduler/kubeconfig
       - /var/lib/kube-scheduler/config.yaml
       - /system/secrets/kubernetes/kube-scheduler/kubeconfig
+      - /var/snap/microk8s/current/credentials/scheduler.config
     defaultkubeconfig: /etc/kubernetes/scheduler.conf
 
   controllermanager:
@@ -70,6 +73,7 @@ master:
       - "controller-manager"
       - "openshift start master controllers"
       - "hypershift openshift-controller-manager"
+      - "containerd"
     confs:
       - /etc/kubernetes/manifests/kube-controller-manager.yaml
       - /etc/kubernetes/manifests/kube-controller-manager.yml
@@ -82,6 +86,7 @@ master:
       - /etc/kubernetes/controller-manager.conf
       - /var/lib/kube-controller-manager/kubeconfig
       - /system/secrets/kubernetes/kube-controller-manager/kubeconfig
+      - /var/snap/microk8s/current/credentials/controller.config
     defaultkubeconfig: /etc/kubernetes/controller-manager.conf
 
   etcd:
@@ -89,6 +94,7 @@ master:
     bins:
       - "etcd"
       - "openshift start etcd"
+      - "containerd"
     datadirs:
       - /var/lib/etcd/default.etcd
       - /var/lib/etcd/data.etcd
@@ -115,6 +121,7 @@ master:
     bins:
       - "hyperkube kubelet"
       - "kubelet"
+      - "containerd"
 
 node:
   components:
@@ -145,6 +152,7 @@ node:
     bins:
       - "hyperkube kubelet"
       - "kubelet"
+      - "containerd"
     kubeconfig:
       - "/etc/kubernetes/kubelet.conf"
       - "/etc/kubernetes/kubelet-kubeconfig.conf"
@@ -190,6 +198,7 @@ node:
       - "hyperkube kube-proxy"
       - "proxy"
       - "openshift start network"
+      - "containerd"
     confs:
       - /etc/kubernetes/proxy
       - /etc/kubernetes/addons/kube-proxy-daemonset.yaml
@@ -215,6 +224,7 @@ etcd:
   etcd:
     bins:
       - "etcd"
+      - "containerd"
     datadirs:
       - /var/lib/etcd/default.etcd
       - /var/lib/etcd/data.etcd
@@ -240,6 +250,7 @@ controlplane:
       - "hyperkube apiserver"
       - "hyperkube kube-apiserver"
       - "apiserver"
+      - "containerd"
 
 policies:
   components: []
@@ -294,6 +305,12 @@ target_mapping:
     - "etcd"
     - "policies"
   "cis-1.24":
+    - "master"
+    - "node"
+    - "controlplane"
+    - "etcd"
+    - "policies"
+  "cis-1.7":
     - "master"
     - "node"
     - "controlplane"

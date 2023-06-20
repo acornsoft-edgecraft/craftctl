@@ -28,7 +28,7 @@
         version: '0.1.0'
         sonobuoy_image: 'edgecraft/sonobuoy'
         sonobuoy_version: 'v0.56.15'
-        debug: 'false'    # true일 경우 Job 실행 완료 후 Pod가 삭제되지 않는다.
+        debug: 'false'    # true일 경우 Job 실행 완료 후 Pod가 종료되지 않는다.
     ```
 
 ## Workflow
