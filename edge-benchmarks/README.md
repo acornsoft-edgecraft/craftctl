@@ -39,7 +39,7 @@
 
     - `edgecraft-api` 의 Swagger UI에서 실행
 
-- 클러스터에 Namespace `edge-benchmarks`로 다음과 같은 관련 리소스를 생성한다. 
+- 클러스터에 `namespace: edge-benchmarks`로 다음과 같은 리소스들을 생성한다. 
 
     - Namespace 
 
@@ -63,7 +63,7 @@
 
 - sonobuoy는 완료된 파일을 확인 후 aggregator(`edge-benchmarks`)로 전송한다. 
 
-- `edge-summarize`가 완료된 파일을 확인 후 요약하여 DB(`tbl_cluster_benchmarks`)에 저장한다.
+- `edge-summarize`가 완료된 파일을 요약하여 DB(`tbl_cluster_benchmarks`)에 저장한다.
 
 
 #### [참고: [Sonobuoy Plugin](https://sonobuoy.io/docs/v0.56.15/plugins/)]
@@ -71,16 +71,18 @@
 ![Sonobuoy Plugin](./images/sonobuoy-plugin-contract.png)
 
 
-#### 주의사항
+## 주의사항
 
 - microk8s
 
-    - microk8s는 구조적인 문제로 인해 Fail 수를 줄이기에는 한계가 있다.
+    - microk8s는 구조적인 문제로 인해 Fail 수를 줄이기에 한계가 있다.
 
-        - 대표적으로 permission, owner 등이 권장사항과 다름.
+        - e.g. permission, owner 등이 권장사항과 다름.
 
     - worker node에서 알 수 없는 이유로 실행이 되지 않을 수 있다. 
-    
-        - sonobuoy plugin pod의 네트워크 문제로 추측되지만 원인 및 해결책을 찾지 못함.
 
-        - worker node에서 `microk8s inspect` 실행 시 `FAIL:  Service snap.microk8s.daemon-k8s-dqlite is not running` 오류가 발생하지만 실행에는 영향을 주지 않음. (클러스터 생성 직후부터 발생)
+        - kube-bench가 실행되는 sonobuoy plugin pod가 인터넷 접속이 되지 않음. 명확한 원인 및 해결책을 찾지 못함.
+        
+        - 클러스터 생성 후 시간이 지나면 발생 가능성이 높아짐.
+
+        - worker node에서 `microk8s inspect` 실행 시 `FAIL:  Service snap.microk8s.daemon-k8s-dqlite is not running` 오류가 발생하지만 이것은 클러스터 생성 직후부터 발생하는 것으로 실행에는 영향을 주지 않음.
