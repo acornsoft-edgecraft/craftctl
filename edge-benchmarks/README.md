@@ -33,13 +33,15 @@
 
 ## Workflow
 
+![Edge Benchmarks](./images/edge-benchmarks.png)
+
 - 클러스터 별 edge-benchmarks를 실행한다. 실행은 두가지 방법으로 가능하다.
 
     - `edgecraft-dashboard` 의 클러스터 `CIS Benchmarks` 메뉴에서 실행 
 
     - `edgecraft-api` 의 Swagger UI에서 실행
 
-- 클러스터에 `namespace: edge-benchmarks`로 다음과 같은 리소스들을 생성한다. 
+- 클러스터에 Namespace `edge-benchmarks`로 다음과 같은 관련 리소스를 생성한다. 
 
     - Namespace 
 
@@ -63,7 +65,7 @@
 
 - sonobuoy는 완료된 파일을 확인 후 aggregator(`edge-benchmarks`)로 전송한다. 
 
-- `edge-summarize`가 완료된 파일을 요약하여 DB(`tbl_cluster_benchmarks`)에 저장한다.
+- `edge-summarize`가 완료된 파일을 확인 후 요약하여 DB(`tbl_cluster_benchmarks`)에 저장한다.
 
 
 #### [참고: [Sonobuoy Plugin](https://sonobuoy.io/docs/v0.56.15/plugins/)]
