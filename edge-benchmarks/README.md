@@ -75,6 +75,14 @@
 
 ## 주의사항
 
+- `FAIL`을 제외한, `PASS`, `WARN`, `INFO`는 준수한 것으로 간주한다.
+
+    - kubeadm: 92%
+
+    - k3s: 99%
+
+    - microk8s: 61%
+
 - microk8s
 
     - microk8s는 구조적인 문제로 인해 Fail 수를 줄이기에 한계가 있다.
