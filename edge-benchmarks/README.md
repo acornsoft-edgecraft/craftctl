@@ -88,3 +88,8 @@
         - 클러스터 생성 후 시간이 지나면 발생 가능성이 높아짐.
 
         - worker node에서 `microk8s inspect` 실행 시 `FAIL:  Service snap.microk8s.daemon-k8s-dqlite is not running` 오류가 발생하지만 이것은 클러스터 생성 직후부터 발생하는 것으로 실행에는 영향을 주지 않음.
+
+- k3s
+
+    - 다른 클러스터에 비해 실행시간이 조금 길다. 대략 5-6분.
+ 
