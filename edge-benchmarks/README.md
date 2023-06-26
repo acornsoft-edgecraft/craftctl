@@ -89,6 +89,10 @@
 
         - e.g. permission, owner 등이 권장사항과 다름.
 
+        - 현 버전에서 설정을 변경하면 Fail 수 줄이기가 가능은 함. 그렇지만 세가지 모두 90%를 넘어야함은 아니라 판단하여 종료.
+
+        - 추후 시도해볼 경우 공식 가이드([CIS hardening and assesment](https://microk8s.io/docs/how-to-cis-harden))에 따라 작업하면 될 듯.
+
     - worker node에서 알 수 없는 이유로 실행이 되지 않을 수 있다. 
 
         - kube-bench가 실행되는 sonobuoy plugin pod가 인터넷 접속이 되지 않음. 명확한 원인 및 해결책을 찾지 못함.
