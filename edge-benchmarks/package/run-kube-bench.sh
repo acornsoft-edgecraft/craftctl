@@ -19,6 +19,10 @@ fi
 
 if [ "$BENCHMARK" != "" ]; then
     benchmark=" --benchmark $BENCHMARK"
+
+    if [ "$BENCHMARK" == "mk8s-1.23" ]; then
+        microk8s.sh
+    fi
 fi 
 
 if [ "$VERSION" != "" ]; then
