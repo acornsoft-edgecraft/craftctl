@@ -101,6 +101,7 @@ groups:
         text: "Ensure that the etcd pod specification file permissions are set to 600 or more restrictive (Automated)"
         audit: "/bin/sh -c 'if test -e /var/snap/microk8s/current/args/k8s-dqlite; then stat -c permissions=%a /var/snap/microk8s/current/args/k8s-dqlite; fi'"
         use_multiple_values: true
+        type: "skip"
         tests:
           test_items:
             - flag: "permissions"
@@ -118,6 +119,7 @@ groups:
         text: "Ensure that the etcd pod specification file ownership is set to root:root (Automated)"
         audit: "/bin/sh -c 'if test -e /var/snap/microk8s/current/args/k8s-dqlite; then stat -c %U:%G /var/snap/microk8s/current/args/k8s-dqlite; fi'"
         use_multiple_values: true
+        type: "skip"
         tests:
           test_items:
             - flag: "root:root"
@@ -162,8 +164,8 @@ groups:
 
       - id: 1.1.11
         text: "Ensure that the etcd data directory permissions are set to 700 or more restrictive (Automated)"
-        audit: |
-          stat -c permissions=%a /var/snap/microk8s/current/var/kubernetes/backend/
+        audit: "stat -c permissions=%a /var/snap/microk8s/current/var/kubernetes/backend/"
+        type: "skip"
         tests:
           test_items:
             - flag: "permissions"
@@ -179,8 +181,8 @@ groups:
 
       - id: 1.1.12
         text: "Ensure that the etcd data directory ownership is set to etcd:etcd (Automated)"
-        audit: |
-          stat -c %U:%G /var/snap/microk8s/current/var/kubernetes/backend/
+        audit: "stat -c %U:%G /var/snap/microk8s/current/var/kubernetes/backend/"
+        type: "skip"
         tests:
           test_items:
             - flag: "etcd:etcd"
@@ -393,13 +395,16 @@ groups:
 
       - id: 1.2.6
         text: "Ensure that the --authorization-mode argument is not set to AlwaysAllow (Automated)"
-        audit: "cat /var/snap/microk8s/current/args/kube-apiserver | grep -e 'authorization-mode.*AlwaysAllow' ; echo $?"
+        audit: "grep -e 'authorization-mode.*AlwaysAllow' /var/snap/microk8s/current/args/kube-apiserver ; echo $?"
         tests:
+          bin_op: or
           test_items:
             - flag: "--authorization-mode"
               compare:
                 op: nothave
                 value: "AlwaysAllow"
+            - flag: "--authorization-mode"
+              set: false
         remediation: |
           Enable RBAC by calling:
           microk8s enable rbac
@@ -448,7 +453,7 @@ groups:
 
       - id: 1.2.10
         text: "Ensure that the admission control plugin AlwaysAdmit is not set (Automated)"
-        audit: "cat /var/snap/microk8s/current/args/kube-apiserver | grep -e '--enable-admission-plugins.*AlwaysAdmit.*' ; echo $?"
+        audit: "grep -e '--enable-admission-plugins.*AlwaysAdmit.*' /var/snap/microk8s/current/args/kube-apiserver ; echo $?"
         tests:
           bin_op: or
           test_items:
@@ -464,7 +469,7 @@ groups:
 
       - id: 1.2.11
         text: "Ensure that the admission control plugin AlwaysPullImages is set (Manual)"
-        audit: "cat /var/snap/microk8s/current/args/kube-apiserver | grep -e '--enable-admission-plugins.*AlwaysPullImages.*' ; echo $?"
+        audit: "grep -e '--enable-admission-plugins.*AlwaysPullImages.*' /var/snap/microk8s/current/args/kube-apiserver ; echo $?"
         tests:
           test_items:
             - flag: "--enable-admission-plugins"
@@ -472,13 +477,14 @@ groups:
                 op: has
                 value: "AlwaysPullImages"
         remediation: |
-          Edit ``/var/snap/microk8s/current/args/kube-apiserverto includeAlwaysPullImagesin the–enable-admission-plugins`.
+          Edit `/var/snap/microk8s/current/args/kube-apiserver` to include `AlwaysPullImages` in the `-–enable-admission-plugins`.
         scored: true
 
       - id: 1.2.12
         text: "Ensure that the admission control plugin SecurityContextDeny is set if PodSecurityPolicy is not used (Manual)"
         audit: |
           grep 'SecurityContextDeny\|PodSecurityPolicy' /var/snap/microk8s/current/args/kube-apiserver ; echo $?
+        type: "skip"
         tests:
           bin_op: or
           test_items:
@@ -546,7 +552,7 @@ groups:
 
       - id: 1.2.16
         text: "Ensure that the --secure-port argument is not set to 0 (Automated)"
-        audit: "grep -e 'secure-port' /var/snap/microk8s/current/args/kube-apiserver"
+        audit: "grep -e 'secure-port' /var/snap/microk8s/current/args/kube-apiserver ; echo $?"
         tests:
           bin_op: or
           test_items:
@@ -564,7 +570,7 @@ groups:
 
       - id: 1.2.17
         text: "Ensure that the --profiling argument is set to false (Automated)"
-        audit: "grep -e '--profiling' /var/snap/microk8s/current/args/kube-apiserver"
+        audit: "grep -e '--profiling' /var/snap/microk8s/current/args/kube-apiserver ; echo $?"
         tests:
           test_items:
             - flag: "--profiling"
@@ -578,7 +584,7 @@ groups:
 
       - id: 1.2.18
         text: "Ensure that the --audit-log-path argument is set (Automated)"
-        audit: "grep -e '--audit-log-path' /var/snap/microk8s/current/args/kube-apiserver"
+        audit: "grep -e '--audit-log-path' /var/snap/microk8s/current/args/kube-apiserver ; echo $?"
         tests:
           test_items:
             - flag: "--audit-log-path"
@@ -590,7 +596,7 @@ groups:
 
       - id: 1.2.19
         text: "Ensure that the --audit-log-maxage argument is set to 30 or as appropriate (Automated)"
-        audit: "grep -e '--audit-log-maxage' /var/snap/microk8s/current/args/kube-apiserver"
+        audit: "grep -e '--audit-log-maxage' /var/snap/microk8s/current/args/kube-apiserver ; echo $?"
         tests:
           test_items:
             - flag: "--audit-log-maxage"
@@ -605,7 +611,7 @@ groups:
 
       - id: 1.2.20
         text: "Ensure that the --audit-log-maxbackup argument is set to 10 or as appropriate (Automated)"
-        audit: "grep -e '--audit-log-maxbackup' /var/snap/microk8s/current/args/kube-apiserver"
+        audit: "grep -e '--audit-log-maxbackup' /var/snap/microk8s/current/args/kube-apiserver ; echo $?"
         tests:
           test_items:
             - flag: "--audit-log-maxbackup"
@@ -620,7 +626,7 @@ groups:
 
       - id: 1.2.21
         text: "Ensure that the --audit-log-maxsize argument is set to 100 or as appropriate (Automated)"
-        audit: "grep -e '--audit-log-maxsize' /var/snap/microk8s/current/args/kube-apiserver"
+        audit: "grep -e '--audit-log-maxsize' /var/snap/microk8s/current/args/kube-apiserver ; echo $?"
         tests:
           test_items:
             - flag: "--audit-log-maxsize"
@@ -635,7 +641,7 @@ groups:
 
       - id: 1.2.22
         text: "Ensure that the --request-timeout argument is set as appropriate (Manual)"
-        audit: "grep -e '--request-timeout' /var/snap/microk8s/current/args/kube-apiserver"
+        audit: "grep -e '--request-timeout' /var/snap/microk8s/current/args/kube-apiserver ; echo $?"
         tests:
           test_items:
             - flag: "--request-timeout"
@@ -664,7 +670,7 @@ groups:
 
       - id: 1.2.24
         text: "Ensure that the --service-account-key-file argument is set as appropriate (Automated)"
-        audit: "grep -e '--service-account-key-file' /var/snap/microk8s/current/args/kube-apiserver"
+        audit: "grep -e '--service-account-key-file' /var/snap/microk8s/current/args/kube-apiserver ; echo $?"
         tests:
           test_items:
             - flag: "--service-account-key-file"
@@ -691,7 +697,7 @@ groups:
       - id: 1.2.26
         text: "Ensure that the --tls-cert-file and --tls-private-key-file arguments are set as appropriate (Automated)"
         audit: |
-          grep -e '--tls-cert-file\|--tls-private-key-file' /var/snap/microk8s/current/args/kube-apiserver
+          grep -e '--tls-cert-file\|--tls-private-key-file' /var/snap/microk8s/current/args/kube-apiserver  ; echo $?
         tests:
           bin_op: and
           test_items:

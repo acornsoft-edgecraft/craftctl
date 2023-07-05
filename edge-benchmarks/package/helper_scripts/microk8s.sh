@@ -68,12 +68,6 @@ chmod -R 600 /var/snap/microk8s/current/certs/
 chmod -R 600 /var/snap/microk8s/current/certs/
 
 
-# Check 1.2.6
-# Check 1.2.7
-# Check 1.2.8
-# microk8s enable rbac
-
-
 # Check 4.1.1
 chmod 600 /etc/systemd/system/snap.microk8s.daemon-kubelite.service
 

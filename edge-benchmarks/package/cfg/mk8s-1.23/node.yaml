@@ -141,7 +141,7 @@ groups:
     checks:
       - id: 4.2.1
         text: "Ensure that the --anonymous-auth argument is set to false (Manual)"
-        audit: "grep -e '--anonymous-auth' /var/snap/microk8s/current/args/kubelet"
+        audit: "grep -e '--anonymous-auth' /var/snap/microk8s/current/args/kubelet ; echo $?"
         tests:
           test_items:
             - flag: "--anonymous-auth"
@@ -155,13 +155,16 @@ groups:
 
       - id: 4.2.2
         text: "Ensure that the --authorization-mode argument is not set to AlwaysAllow (Automated)"
-        audit: "grep -e '--authorization-mode' /var/snap/microk8s/current/args/kubelet"
+        audit: "grep -e '--authorization-mode' /var/snap/microk8s/current/args/kubelet ; echo $?"
         tests:
+          bin_op: or
           test_items:
-            - flag: --authorization-mode
+            - flag: "--authorization-mode"
               compare:
                 op: nothave
                 value: AlwaysAllow
+            - flag: "--authorization-mode"
+              set: false
         remediation: |
           Edit the kubelet service arguments file /var/snap/microk8s/current/args/kubelet and set the parameter:
           --authorization-mode=Webhook
@@ -169,7 +172,7 @@ groups:
 
       - id: 4.2.3
         text: "Ensure that the --client-ca-file argument is set as appropriate (Automated)"
-        audit: "grep -e '--client-ca-file' /var/snap/microk8s/current/args/kubelet"
+        audit: "grep -e '--client-ca-file' /var/snap/microk8s/current/args/kubelet ; echo $?"
         tests:
           test_items:
             - flag: --client-ca-file
@@ -219,7 +222,7 @@ groups:
 
       - id: 4.2.6
         text: "Ensure that the --protect-kernel-defaults argument is set to true (Automated)"
-        audit: "grep -e '--protect-kernel-defaults' /var/snap/microk8s/current/args/kubelet"
+        audit: "grep -e '--protect-kernel-defaults' /var/snap/microk8s/current/args/kubelet ; echo $?"
         audit_config: "/bin/cat $kubeletconf"
         tests:
           test_items:
