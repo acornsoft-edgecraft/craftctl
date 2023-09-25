@@ -12,19 +12,19 @@
     make build
     ```
     
-- `edge-benchamrks` container image 생성
+- `edge-benchmarks` container image 생성
 
     ```bash
     docker build -f package/Dockfile -t <image_name:tag> .
     ```
 
-- `edgecraft-api`의 `conf/config.yml` 에서 config 정보 반영 
+- `edgecraft-api`의 `conf/config.yml`에서 config 정보 반영 
 
     e.g.
 
     ```yaml
     benchmarks:
-        image: 'edgecraft/edge-benchmarks'
+        image: 'ghcr.io/acornsoft-edgecraft/edge-benchmarks'
         version: '0.1.0'
         sonobuoy_image: 'edgecraft/sonobuoy'
         sonobuoy_version: 'v0.56.15'
@@ -35,7 +35,7 @@
 
 ![Edge Benchmarks](./images/edge-benchmarks.png)
 
-- 클러스터 별 edge-benchmarks를 실행한다. 실행은 두가지 방법으로 가능하다.
+- edge-benchmarks를 실행한다. 실행은 두가지 방법으로 가능하다.
 
     - `edgecraft-dashboard` 의 클러스터 `CIS Benchmarks` 메뉴에서 실행 
 
