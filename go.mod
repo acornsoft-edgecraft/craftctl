@@ -1,4 +1,4 @@
-module github.com/acornsoft-edgecraft/edgecraft-ctl
+module github.com/acornsoft-edgecraft/craftctl
 
 go 1.18
 

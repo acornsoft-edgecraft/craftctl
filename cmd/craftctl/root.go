@@ -1,4 +1,4 @@
-package edgecraft_ctl
+package craftctl
 
 import (
 	"fmt"
