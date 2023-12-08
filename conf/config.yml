@@ -1,0 +1,11 @@
+# Database
+database:
+  type: 'postgres'
+  host: '192.168.88.79'
+  port: '31000'
+  database_name: 'edgecraft'
+  schema_name: 'edgecraft'
+  username: 'edgecraft'
+  password: 'edgecraft'
+  max_idle_conns: 5
+  max_open_conns: 40
