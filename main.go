@@ -1,7 +1,7 @@
 package main
 
-import "github.com/acornsoft-edgecraft/edgecraft-ctl/cmd/edgecraft_ctl"
+import "github.com/acornsoft-edgecraft/craftctl/cmd/craftctl"
 
 func main() {
-	edgecraft_ctl.Execute()
+	craftctl.Execute()
 }
