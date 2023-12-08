@@ -98,6 +98,7 @@ master:
     datadirs:
       - /var/lib/etcd/default.etcd
       - /var/lib/etcd/data.etcd
+      - /var/snap/microk8s/current/var/kubernetes/backend
     confs:
       - /etc/kubernetes/manifests/etcd.yaml
       - /etc/kubernetes/manifests/etcd.yml
@@ -228,6 +229,7 @@ etcd:
     datadirs:
       - /var/lib/etcd/default.etcd
       - /var/lib/etcd/data.etcd
+      - /var/snap/microk8s/current/var/kubernetes/backend
     confs:
       - /etc/kubernetes/manifests/etcd.yaml
       - /etc/kubernetes/manifests/etcd.yml
@@ -236,6 +238,7 @@ etcd:
       - /var/snap/etcd/common/etcd.conf.yml
       - /var/snap/etcd/common/etcd.conf.yaml
       - /var/snap/microk8s/current/args/etcd
+      - /var/snap/microk8s/current/args/k8s-dqlite
       - /usr/lib/systemd/system/etcd.service
     defaultconf: /etc/kubernetes/manifests/etcd.yaml
     defaultdatadir: /var/lib/etcd/default.etcd
@@ -272,6 +275,7 @@ version_mapping:
   "1.25": "cis-1.7"
   "cis-1.6-k3s": "cis-1.6-k3s"
   "k3s-1.23": "k3s-1.23"
+  "mk8s-1.23": "mk8s-1.23"
 
 target_mapping:
   "cis-1.5":
@@ -317,6 +321,12 @@ target_mapping:
     - "etcd"
     - "policies"
   "k3s-1.23":
+    - "master"
+    - "node"
+    - "controlplane"
+    - "etcd"
+    - "policies"
+  "mk8s-1.23":
     - "master"
     - "node"
     - "controlplane"

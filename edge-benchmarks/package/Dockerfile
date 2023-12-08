@@ -29,10 +29,12 @@ COPY --from=intermediate /kube-bench/cfg /etc/kube-bench/cfg/
 
 COPY package/cfg/config.yaml /etc/kube-bench/cfg/
 COPY package/cfg/k3s-1.23/ /etc/kube-bench/cfg/k3s-1.23/
+COPY package/cfg/mk8s-1.23/ /etc/kube-bench/cfg/mk8s-1.23/
 
 COPY package/run.sh \
     package/run-kube-bench.sh \  
     package/helper_scripts/check_for_k3s_etcd.sh \
+    package/helper_scripts/microk8s.sh \
     /usr/bin/
 
 RUN mkdir edge-benchmarks
